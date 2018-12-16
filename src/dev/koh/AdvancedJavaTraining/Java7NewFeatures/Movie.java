@@ -6,7 +6,7 @@ public class Movie {
     private String genre;
 
     Movie(String title, String genre){
-        System.out.println("Movie Constructor.");
+//        System.out.println("Movie Constructor.");
 
         this.title = title;
         this.genre = genre;
