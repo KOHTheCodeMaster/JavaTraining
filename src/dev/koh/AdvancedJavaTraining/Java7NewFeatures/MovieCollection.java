@@ -28,6 +28,15 @@ class MovieCollection {
     }
 
     void displayMovieDetails() {
+
+        class MovieAlbum {
+            void openAlbum() {
+                System.out.println("Launching Movie Album!");
+            }
+        }
+
+        new MovieAlbum().openAlbum();
+
         for (Movie movie : movieList) {
             System.out.println(movie.getTitle() + " - " + movie.getGenre());
         }
