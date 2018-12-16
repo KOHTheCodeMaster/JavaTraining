@@ -15,7 +15,7 @@ public class StringsInSwitch {
 
         for (int i = 0; i < movieCollection.getSize(); i++) {
 
-            String title = movieCollection.getMovieList().get(i).getTitle();
+            MovieTitle title = movieCollection.getMovieList().get(i).getTitle();
             String genre = movieCollection.getMovieList().get(i).getGenre();
 
             switch (title) {
@@ -23,17 +23,17 @@ public class StringsInSwitch {
                 //  Prior to Java 7, switch cases only allowed Primitive Data Types to be used for cases.
                 //  But Java 7 allows String Literals to be used & compared within switch cases.
 
-                case "3 Idiots":
+                case MOWGLI:
                     System.out.println(title + " - " + genre);
                     break;
-                case "Avengers":
-//                    System.out.println(movie.getTitle() + " - " + movie.getGenre());
-                    break;
-                case "Mowgli":
+                case AVENGERS:
                     System.out.println(title + " - " + genre);
                     break;
-                case "Harry Potter":
-//                    System.out.println(movie.getTitle() + " - " + movie.getGenre());
+                case THREEIDIOTS:
+                    System.out.println(title + " - " + genre);
+                    break;
+                case HARRYPOTTER:
+                    System.out.println(title + " - " + genre);
                     break;
             }
         }

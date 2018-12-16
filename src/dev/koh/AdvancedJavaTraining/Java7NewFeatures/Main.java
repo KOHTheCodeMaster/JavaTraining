@@ -6,7 +6,7 @@ public class Main {
 
         System.out.println("Begin.\n");
 
-        MovieCollection movieCollection = new MovieCollection(3, "3 Idiots", "Comedy");
+        MovieCollection movieCollection = new MovieCollection(7, MovieTitle.HARRYPOTTER, "Fantasy");
 
         movieCollection.displayMovieDetails();
 
@@ -19,7 +19,7 @@ public class Main {
  *  Course: Advanced Java Programming - LinkedIn Learning..!!
  *  Mentor: David Gassner.
  *  Date Created: 15th December 2K18 04:58 PM..!!
- *  Last Modified: 16th December 2K18 04:59 PM..!!
+ *  Last Modified: 16th December 2K18 05:10 PM..!!
  *
  *  Code Developed By,
  *  ~K.O.H..!! ^__^

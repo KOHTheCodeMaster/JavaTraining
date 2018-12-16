@@ -10,7 +10,7 @@ class MovieCollection {
         System.out.println("MovieCollection Instance Field Initializer Block.");
 
         movieList = new ArrayList<>();
-        movieList.add(new Movie("Mowgli", "Animated"));
+        movieList.add(new Movie(MovieTitle.MOWGLI, "Animated"));
 
     }
 
@@ -18,12 +18,12 @@ class MovieCollection {
         System.out.println("MovieCollection Constructor.");
     }
 
-    MovieCollection(int n, String title, String genre) {
+    MovieCollection(int n, MovieTitle title, String genre) {
         for (int i = 0; i < n; i++)
             this.movieList.add(new Movie(title, genre));
     }
 
-    void addMovie(String title, String genre) {
+    void addMovie(MovieTitle title, String genre) {
         this.movieList.add(new Movie(title, genre));
     }
 
@@ -54,21 +54,21 @@ class MovieCollection {
 
     class Movie {
 
-        private String title;
+        private MovieTitle title;
         private String genre;
 
-        Movie(String title, String genre) {
+        Movie(MovieTitle title, String genre) {
 //        System.out.println("Movie Constructor.");
 
             this.title = title;
             this.genre = genre;
         }
 
-        String getTitle() {
+        MovieTitle getTitle() {
             return title;
         }
 
-        void setTitle(String title) {
+        void setTitle(MovieTitle title) {
             this.title = title;
         }
 

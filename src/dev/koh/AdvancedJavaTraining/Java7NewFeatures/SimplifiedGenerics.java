@@ -14,9 +14,9 @@ public class SimplifiedGenerics {
     }
 
     private void initializeMovieList(){
-        movieCollection.addMovie("3 Idiots", "Comedy");
-        movieCollection.addMovie("Mowgli", "Animated");
-        movieCollection.addMovie("Avengers", "Action");
+        movieCollection.addMovie(MovieTitle.THREEIDIOTS, "Comedy");
+        movieCollection.addMovie(MovieTitle.HARRYPOTTER, "Animated");
+        movieCollection.addMovie(MovieTitle.AVENGERS, "Action");
     }
 
     void displayMovieList(){
