@@ -2,34 +2,38 @@ package dev.koh.AdvancedJavaTraining.Java7NewFeatures;
 
 public class StringsInSwitch {
 
-    private SimplifiedGenerics simplifiedGenerics;
+    private MovieCollection movieCollection;
 
     StringsInSwitch() {
         System.out.println("StringsInSwitch Constructor.");
 
-        simplifiedGenerics = new SimplifiedGenerics();
+        movieCollection = new MovieCollection();
 
     }
 
     void displayMovieDetails() {
 
-        for (Movie movie : simplifiedGenerics.movieList) {
-            switch (movie.getTitle()) {
+        for (int i = 0; i < movieCollection.getSize(); i++) {
+
+            String title = movieCollection.getMovieList().get(i).getTitle();
+            String genre = movieCollection.getMovieList().get(i).getGenre();
+
+            switch (title) {
 
                 //  Prior to Java 7, switch cases only allowed Primitive Data Types to be used for cases.
                 //  But Java 7 allows String Literals to be used & compared within switch cases.
 
                 case "3 Idiots":
-                    System.out.println(movie.getTitle() + " - " + movie.getGenre());
+                    System.out.println(title + " - " + genre);
                     break;
                 case "Avengers":
-                    System.out.println(movie.getTitle() + " - " + movie.getGenre());
+//                    System.out.println(movie.getTitle() + " - " + movie.getGenre());
                     break;
-                case "OMG":
-                    System.out.println(movie.getTitle() + " - " + movie.getGenre());
+                case "Mowgli":
+                    System.out.println(title + " - " + genre);
                     break;
                 case "Harry Potter":
-                    System.out.println(movie.getTitle() + " - " + movie.getGenre());
+//                    System.out.println(movie.getTitle() + " - " + movie.getGenre());
                     break;
             }
         }

@@ -1,18 +1,15 @@
 package dev.koh.AdvancedJavaTraining.Java7NewFeatures;
 
-import java.util.ArrayList;
-
 public class Main {
 
     public static void main(String[] args) {
 
         System.out.println("Begin.\n");
 
-        ArrayList<Movie> movies = new MovieCollection(3, "3 Idiots", "Comedy").movieList;
+        MovieCollection movieCollection = new MovieCollection(3, "3 Idiots", "Comedy");
 
-        for (Movie movie : movies) {
-            System.out.println(movie.getTitle() + " - " + movie.getGenre());
-        }
+        movieCollection.displayMovieDetails();
+
         System.out.println("\nEnd.");
 
     }
@@ -22,7 +19,7 @@ public class Main {
  *  Course: Advanced Java Programming - LinkedIn Learning..!!
  *  Mentor: David Gassner.
  *  Date Created: 15th December 2K18 04:58 PM..!!
- *  Last Modified: 16th December 2K18 04:24 PM..!!
+ *  Last Modified: 16th December 2K18 04:49 PM..!!
  *
  *  Code Developed By,
  *  ~K.O.H..!! ^__^
