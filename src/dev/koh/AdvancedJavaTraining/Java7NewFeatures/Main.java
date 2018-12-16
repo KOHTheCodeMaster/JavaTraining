@@ -8,7 +8,7 @@ public class Main {
 
         System.out.println("Begin.\n");
 
-        ArrayList<Movie> movies = MovieCollection.movieList;
+        ArrayList<Movie> movies = new MovieCollection(3, "3 Idiots", "Comedy").movieList;
 
         for (Movie movie : movies) {
             System.out.println(movie.getTitle() + " - " + movie.getGenre());
@@ -22,7 +22,7 @@ public class Main {
  *  Course: Advanced Java Programming - LinkedIn Learning..!!
  *  Mentor: David Gassner.
  *  Date Created: 15th December 2K18 04:58 PM..!!
- *  Last Modified: 16th December 2K18 04:06 PM..!!
+ *  Last Modified: 16th December 2K18 04:24 PM..!!
  *
  *  Code Developed By,
  *  ~K.O.H..!! ^__^

@@ -2,17 +2,15 @@ package dev.koh.AdvancedJavaTraining.Java7NewFeatures;
 
 import java.util.ArrayList;
 
-public class MovieCollection {
+class MovieCollection {
 
-    static ArrayList<Movie> movieList;
+    ArrayList<Movie> movieList;
 
-    static {
-        System.out.println("MovieCollection Static Initializer Block.");
+    {
+        System.out.println("MovieCollection Instance Field Initializer Block.");
 
         movieList = new ArrayList<>();
         movieList.add(new Movie("Mowgli", "Animated"));
-        movieList.add(new Movie("3 Idiots", "Comedy"));
-        movieList.add(new Movie("Avengers", "Action"));
 
     }
 
@@ -20,4 +18,8 @@ public class MovieCollection {
         System.out.println("MovieCollection Constructor.");
     }
 
+    public MovieCollection(int n, String title, String genre) {
+        for (int i = 0; i < n; i++)
+            this.movieList.add(new Movie(title, genre));
+    }
 }
