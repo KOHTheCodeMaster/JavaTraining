@@ -29,13 +29,15 @@ class MovieCollection {
 
     void displayMovieDetails() {
 
-        class MovieAlbum {
-            void openAlbum() {
-                System.out.println("Launching Movie Album!");
-            }
-        }
+        //  Using Anonymous Class for one time method invocation.
+        //  Parent Class is used for anonymous class, Object class is used as its the Ultimate Super Class.
+        new Object() {
 
-        new MovieAlbum().openAlbum();
+            private void openAlbum() {
+                System.out.println("Opening Movie Album.");
+            }
+
+        }.openAlbum();
 
         for (Movie movie : movieList) {
             System.out.println(movie.getTitle() + " - " + movie.getGenre());
