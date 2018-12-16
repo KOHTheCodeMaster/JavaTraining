@@ -9,7 +9,7 @@ public class SimplifiedGenerics {
     ArrayList<Movie> movieList = new ArrayList<>();
 
     SimplifiedGenerics(){
-        System.out.println("Constructor...");
+        System.out.println("SimplifiedGenerics Constructor...");
         initializeMovieList();
     }
 
