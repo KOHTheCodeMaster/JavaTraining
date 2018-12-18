@@ -6,9 +6,9 @@ public class Main {
 
         System.out.println("Begin.\n");
 
-        UsingTreeSet obj = new UsingTreeSet();
+        UsingLinkedList obj = new UsingLinkedList();
 
-        obj.demonstrateTreeSet();
+        obj.demonstrateLinkedList();
 
         System.out.println("\nEnd.");
 
@@ -19,7 +19,7 @@ public class Main {
  *  Course: Advanced Java Programming - LinkedIn Learning..!!
  *  Mentor: David Gassner.
  *  Date Created: 15th December 2K18 04:58 PM..!!
- *  Last Modified: 18th December 2K18 06:36 PM..!!
+ *  Last Modified: 18th December 2K18 07:11 PM..!!
  *
  *  Code Developed By,
  *  ~K.O.H..!! ^__^
