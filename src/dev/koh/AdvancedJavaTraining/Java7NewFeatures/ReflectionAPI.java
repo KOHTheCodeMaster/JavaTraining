@@ -1,11 +1,13 @@
 package dev.koh.AdvancedJavaTraining.Java7NewFeatures;
 
-public class ReflectionAPI {
+class ReflectionAPI {
 
     ReflectionAPI() {
         System.out.println("ReflectionAPI Constructor.");
+    }
 
-        Student student = new Student();
+    void demonstrateReflectionAPI() {
+        Student student = new Student("S", "A");
 
         Class<?> r = student.getClass();
         System.out.println("Current Class: " + r.getName());
@@ -18,18 +20,47 @@ public class ReflectionAPI {
 
         Package pack = s.getPackage();
         System.out.println("Package Name: " + pack.getName());
-
     }
 
 }
 
-class Person {
-    Person() {
+class Person implements Comparable<Person> {
+
+    private String name;
+
+    Person(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public int compareTo(Person o) {
+        String x = this.getClass().getSimpleName();
+        String y = o.getClass().getSimpleName();
+        return x.compareTo(y);
+    }
+
+    @Override
+    public String toString() {
+        return "Name: " + this.name;
+    }
+
+    String getName() {
+        return name;
     }
 }
 
 class Student extends Person {
-    Student() {
+    private String branch;
 
+    Student(String name, String branch) {
+        super(name);
+        this.branch = branch;
     }
+
+
+    @Override
+    public String toString() {
+        return "Name: " + getName() + " | Branch: " + this.branch;
+    }
+
 }
