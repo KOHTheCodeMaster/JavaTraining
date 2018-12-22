@@ -8,10 +8,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-        PersonList personList = new PersonList();
-
-        personList.displayPersonListWithoutLambda();
-        personList.displayPersonListUsingLambdaExpression();
+        Movie obj = new Movie();
+        obj.init();
 
     }
 
@@ -182,9 +180,9 @@ public class Main {
 }
 
 /*
- *  Time Stamp: 22nd December 2K18, 08:23 PM..!!
+ *  Time Stamp: 22nd December 2K18, 08:57 PM..!!
  *
- *  Latest Update:  Defining Built-in Predicate Functional Interface.
+ *  Latest Update:  Method References using :: Operator.
  *
  *  Change Log:
  *  1. Functional Interface.
@@ -193,6 +191,7 @@ public class Main {
  *  4. Sort List using Comparator.
  *  5. Traversing through the List using forEach method which takes in
  *     Consumer Functional Interface as an Arg. with the help of Lambda Expression.
+ *  6. Defining Built-in Predicate Functional Interface.
  *
  *  Course: Java SE 8 New Features - LinkedIn Learning..!!
  *      Mentor: David Gassner.
