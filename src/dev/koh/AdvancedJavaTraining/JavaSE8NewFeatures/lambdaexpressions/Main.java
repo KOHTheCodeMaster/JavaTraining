@@ -8,9 +8,10 @@ public class Main {
 
     public static void main(String[] args) {
 
-        //  Demonstrating the use of Runnable Interface i.e.
-        //  Implemented by Thread class.
-        demonstrateSortList();
+        TraversingList obj = new TraversingList();
+
+        obj.traversalUsingLambdaExpression();
+        obj.traversalWithoutLambdaExpression();
 
     }
 
@@ -181,14 +182,16 @@ public class Main {
 }
 
 /*
- *  Time Stamp: 22nd December 2K18, 12:22 PM..!!
+ *  Time Stamp: 22nd December 2K18, 07:43 PM..!!
  *
- *  Latest Update:  Sort List using Comparator.
+ *  Latest Update:  Traversing through the List using forEach method which takes in
+ *                  Consumer Functional Interface as an Arg. with the help of Lambda Expression.
  *
  *  Change Log:
  *  1. Functional Interface.
  *  2. FunctionalInterface with arguments & return type.
  *  3. Runnable Interface.
+ *  4. Sort List using Comparator.
  *
  *  Course: Java SE 8 New Features - LinkedIn Learning..!!
  *      Mentor: David Gassner.
