@@ -1,13 +1,57 @@
 package dev.koh.AdvancedJavaTraining.JavaSE8NewFeatures.lambdaexpressions;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 public class Main {
 
     public static void main(String[] args) {
 
         //  Demonstrating the use of Runnable Interface i.e.
         //  Implemented by Thread class.
-        demonstrateRunnable();
+        demonstrateSortList();
 
+    }
+
+    private static void demonstrateSortList() {
+
+        ArrayList<String> cityList = new ArrayList<>();
+
+        cityList.add("france");
+        cityList.add("New york");
+        cityList.add("europe");
+        cityList.add("United states of america");
+
+        sortWithoutLambdaFunction(cityList);
+        sortUsingLambdaFunction(cityList);
+
+    }
+
+    private static void sortUsingLambdaFunction(ArrayList<String> cityList) {
+
+        //  Sorting elements without case sensitivity.
+        Comparator<String> comparator = String::compareToIgnoreCase;
+        Collections.sort(cityList, comparator);
+        System.out.println("Using Lambda Expression: " + cityList);
+
+    }
+
+    private static void sortWithoutLambdaFunction(ArrayList<String> cityList) {
+
+        //  Sorting elements with case sensitivity.
+        Collections.sort(cityList);
+        System.out.println("Case Sensitive Sort: " + cityList);
+
+        //  Sorting elements without case sensitivity.
+        Collections.sort(cityList, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o1.compareToIgnoreCase(o2);
+            }
+        });
+        System.out.println("Ignoring the Cases:");
+        System.out.println("Without Using Lambda Expression: " + cityList);
     }
 
     private static void demonstrateRunnable() {
@@ -137,13 +181,14 @@ public class Main {
 }
 
 /*
- *  Time Stamp: 22nd December 2K18, 11:29 PM..!!
+ *  Time Stamp: 22nd December 2K18, 12:22 PM..!!
  *
- *  Latest Update:  Runnable Interface.
+ *  Latest Update:  Sort List using Comparator.
  *
  *  Change Log:
  *  1. Functional Interface.
  *  2. FunctionalInterface with arguments & return type.
+ *  3. Runnable Interface.
  *
  *  Course: Java SE 8 New Features - LinkedIn Learning..!!
  *      Mentor: David Gassner.
