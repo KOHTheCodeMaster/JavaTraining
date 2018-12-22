@@ -4,9 +4,66 @@ public class Main {
 
     public static void main(String[] args) {
 
-        //  Demonstrating the use of Calculator Interface i.e.
-        //  FunctionalInterface with arguments & a return type.
-        demonstrateCalculatorInterface();
+        //  Demonstrating the use of Runnable Interface i.e.
+        //  Implemented by Thread class.
+        demonstrateRunnable();
+
+    }
+
+    private static void demonstrateRunnable() {
+
+
+        //  Using Local Inner class.
+        runnableUsingLocalInnerClass();
+
+        //  Using Lambda Expressions to remove the unnecessary Boiler Play Code.
+        runnableUsingLambaExpression();
+
+    }
+
+    private static void runnableUsingLambaExpression() {
+
+        Runnable r1 = () -> System.out.println("Thread 1.");
+
+        Runnable r2 = () -> {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Thread 2.");
+        };
+
+        Thread thread1 = new Thread(r1);
+        Thread thread2 = new Thread(r2);
+
+        //  Order of execution could be random so thread2 is explicitly made to sleep for 1 second.
+        thread1.start();
+        thread2.start();
+
+    }
+
+    private static void runnableUsingLocalInnerClass() {
+
+        Runnable runnable1 = new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("Thread 1.");
+            }
+        };
+
+        Runnable runnable2 = new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("Thread 2.");
+            }
+        };
+
+        Thread thread1 = new Thread(runnable1);
+        Thread thread2 = new Thread(runnable2);
+
+        thread1.start();
+        thread2.start();
 
     }
 
@@ -80,12 +137,13 @@ public class Main {
 }
 
 /*
- *  Time Stamp: 22nd December 2K18, 11:16 PM..!!
+ *  Time Stamp: 22nd December 2K18, 11:29 PM..!!
  *
- *  Latest Update:  FunctionalInterface with arguments & return type.
+ *  Latest Update:  Runnable Interface.
  *
  *  Change Log:
  *  1. Functional Interface.
+ *  2. FunctionalInterface with arguments & return type.
  *
  *  Course: Java SE 8 New Features - LinkedIn Learning..!!
  *      Mentor: David Gassner.
