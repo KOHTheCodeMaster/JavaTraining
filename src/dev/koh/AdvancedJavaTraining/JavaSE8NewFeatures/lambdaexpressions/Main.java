@@ -8,10 +8,10 @@ public class Main {
 
     public static void main(String[] args) {
 
-        TraversingList obj = new TraversingList();
+        PersonList personList = new PersonList();
 
-        obj.traversalUsingLambdaExpression();
-        obj.traversalWithoutLambdaExpression();
+        personList.displayPersonListWithoutLambda();
+        personList.displayPersonListUsingLambdaExpression();
 
     }
 
@@ -182,16 +182,17 @@ public class Main {
 }
 
 /*
- *  Time Stamp: 22nd December 2K18, 07:43 PM..!!
+ *  Time Stamp: 22nd December 2K18, 08:23 PM..!!
  *
- *  Latest Update:  Traversing through the List using forEach method which takes in
- *                  Consumer Functional Interface as an Arg. with the help of Lambda Expression.
+ *  Latest Update:  Defining Built-in Predicate Functional Interface.
  *
  *  Change Log:
  *  1. Functional Interface.
  *  2. FunctionalInterface with arguments & return type.
  *  3. Runnable Interface.
  *  4. Sort List using Comparator.
+ *  5. Traversing through the List using forEach method which takes in
+ *     Consumer Functional Interface as an Arg. with the help of Lambda Expression.
  *
  *  Course: Java SE 8 New Features - LinkedIn Learning..!!
  *      Mentor: David Gassner.
