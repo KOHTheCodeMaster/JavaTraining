@@ -8,16 +8,19 @@ public class Main {
 
         StreamOfStrings obj = new StreamOfStrings();
 
-        obj.manipulateLongWords();
+        obj.generateStreams();
 
     }
 
 }
 
 /*
- *  Time Stamp: 23rd December 2K18, 10:33 PM..!!
+ *  Time Stamp: 23rd December 2K18, 11:42 PM..!!
  *
- *  Latest Update:  Streams filter() & count() method.
+ *  Latest Update:  Generating Streams.
+ *
+ *  Change Log:
+ *  1. Streams filter() & count() method.
  *
  *  Self Practice : Java Streams API.
  *
