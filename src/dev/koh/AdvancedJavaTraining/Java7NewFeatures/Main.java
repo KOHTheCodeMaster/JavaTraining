@@ -6,9 +6,9 @@ public class Main {
 
         System.out.println("Begin.\n");
 
-        UsingLinkedList obj = new UsingLinkedList();
+        TestingUsingAssert obj = new TestingUsingAssert();
 
-        obj.demonstrateLinkedList();
+        obj.calculate();
 
         System.out.println("\nEnd.");
 
