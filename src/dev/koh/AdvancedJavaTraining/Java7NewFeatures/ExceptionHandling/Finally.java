@@ -39,4 +39,22 @@ public class Finally {
 
     }
 
+    void usingTryWithResources() {
+        try (
+                FileReader fileReader = new FileReader("./res/txtfiles/testDoc.txt");
+                FileWriter fileWriter = new FileWriter("./res/txtfiles/textDoc.txt");
+                BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+        ) {
+            String temp;
+            while ((temp = bufferedReader.readLine()) != null) {
+                fileWriter.write(temp);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
