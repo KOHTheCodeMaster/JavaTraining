@@ -10,7 +10,7 @@ public class BubbleSort {
     private ArrayList<Integer> arrayList;
     private int size;
 
-    BubbleSort() {
+    public BubbleSort() {
         size = 0;
         arrayList = new ArrayList<>(size);
     }
@@ -58,7 +58,7 @@ public class BubbleSort {
 
     }
 
-    ArrayList<Integer> bubbleSort(ArrayList<Integer> list) {
+    public ArrayList<Integer> bubbleSort(ArrayList<Integer> list) {
 
         for (int i = 0; i < this.size; i++) {
             //  The Loop Iterates not only just 1 less than the size of the list.
@@ -78,7 +78,7 @@ public class BubbleSort {
         return list;
     }
 
-    ArrayList<Integer> bubbleSort() {
+    public ArrayList<Integer> bubbleSort() {
 
         for (int i = 0; i < this.size; i++) {
             //  The Loop Iterates not only just 1 less than the size of the list.
@@ -113,11 +113,11 @@ public class BubbleSort {
 
     }
 
-    void displayList() {
+    public void displayList() {
         printList(this.getArrayList());
     }
 
-    void printList(ArrayList<Integer> list) {
+    public void printList(ArrayList<Integer> list) {
         for (int i : list) {
             System.out.print(i + " ");
         }
@@ -138,5 +138,6 @@ public class BubbleSort {
 
     public void setArrayList(ArrayList<Integer> arrayList) {
         this.arrayList = arrayList;
+        size = arrayList.size();
     }
 }
