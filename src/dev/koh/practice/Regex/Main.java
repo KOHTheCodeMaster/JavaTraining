@@ -6,9 +6,8 @@ public class Main {
 
         //  Time Stamp: 24th March 2K19, 05:18 PM..!!
         RegexBasics obj = new RegexBasics();
-        obj.demonstrateSimpleCharacterClasses();
-        obj.demonstrateRangeOfCharacters();
-
+        String result = obj.fixScrapedFName("wh\\at i:s y/o*u/r n<a>m\"e?");
+        System.out.println(result);
     }
 
 }

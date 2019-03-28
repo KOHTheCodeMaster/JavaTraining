@@ -3,50 +3,58 @@ package dev.koh.practice.Regex;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class RegexBasics {
+class RegexBasics {
 
-    /*
-        private String pattern;
-        private String srcText;
-        private File srcFile;
-        private ArrayList<String> result;
+    String fixScrapedFName(String scrapedFName) {
 
-    */
-    private int count;
+        /*
+            illegal chars. for file name => /\:"?<>*|
+            also, '-' included for avoiding conflicts with file names.
+            E.g. scrapedFName : Challenge- Can You Solve This?
+            '?' is part of special char. set of illegal file name chars. but to trim off the '-' also
+            its included in the special symbol set.
+         */
 
-    private Pattern p;
-    private Matcher m;
+        String regexSpecialSymbolFilter = "[\\-/\\\\:\"?<>*|]";
+        String updatedFName = "";
 
-/*
-    RegexBasics(String pattern, String srcText) {
-        this.pattern = pattern;
-        this.srcText = srcText;
-        result = new ArrayList<>();
+        /*
+            Pattern p = Pattern.compile(regexSpecialSymbolFilter);
+            Matcher m = p.matcher(scrapedFName);
+            updatedFName = m.replaceAll("");
 
-        p = Pattern.compile(pattern);
-        m = p.matcher(srcText);
+            //  Above 3 Lines could be replaced with following single line.
+            updatedFName = scrapedFName.replaceAll(regexSpecialSymbolFilter, "");
+        */
 
-        displayPatternAndSrcText();
+        updatedFName = scrapedFName.replaceAll(regexSpecialSymbolFilter, "");
+        return updatedFName;
     }
-*/
 
-/*
-    private void displayPatternAndSrcText() {
+    private String removeParticularChar(String str, char replacementChar) {
+        String temp = "";
+        while (str.contains(replacementChar + "")) {
 
-        System.out.println("Pattern: " + this.pattern);
-        System.out.println("Source Text: " + this.srcText);
-        System.out.println();
+            int i = str.indexOf(replacementChar);
 
+            //  Skip ith position & copy rest of the string to temp.
+            temp = str.substring(0, i);
+            temp += str.substring(i + 1);
+
+            //  Update the original string after removal of the char.
+            str = temp;
+        }
+        return str;
     }
-*/
 
     void findInText(String pattern, String text) {
 
-        this.p = Pattern.compile(pattern);
-        this.m = p.matcher(text);
+        Pattern p = Pattern.compile(pattern);
+        Matcher m = p.matcher(text);
 
         boolean matchFound = false;
-        count = 0;
+        int count = 0;
+
         while (m.find()) {
             System.out.println("String Matched: \"" + m.group() + "\" @Pos.: " + m.start() +
                     " | Regex: " + pattern + " | Text: " + text);
