@@ -24,7 +24,33 @@ public class SimpleLambdaFunction {
 
 //        demonstrateImperative();
 //        demonstrateDeclarative();
-        demonstrateLambdaFunction();
+//        demonstrateLambdaFunction();
+//        demonstrateMethodReference();
+        demonstrateMethodReference2();
+
+    }
+
+    private static void shoutOutLoud(String msg) {
+        System.out.println(msg.toUpperCase() + "..!!");
+    }
+
+    private static void demonstrateMethodReference2() {
+
+        Consumer<String> speaker = (SimpleLambdaFunction::shoutOutLoud);
+        //  feeding each element of the ingredients directly to the shoutOutLoud
+        //  which is a static method of SimpleLambdaFunction.
+
+        //  ingredients.forEach(SimpleLambdaFunction::shoutOutLoud);
+
+        ingredients.forEach(speaker);
+
+    }
+
+    private static void demonstrateMethodReference() {
+
+        //  feeding each element of the ingredients directly to the println which is instance method
+        //  of the static reference out in System class.
+        ingredients.forEach(System.out::println);
 
     }
 
