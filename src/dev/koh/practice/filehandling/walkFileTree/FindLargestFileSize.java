@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 
-public class WalkFileTree {
+public class FindLargestFileSize {
 
     private static long dirCount = 0;
     private static long fileCount = 0;
@@ -12,12 +12,32 @@ public class WalkFileTree {
     private static String sizeUnit;
     private static Path maxSizedFile;
 
-
     public static void main(String[] args) throws IOException {
 
-        WalkFileTree obj = new WalkFileTree();
+        FindLargestFileSize obj = new FindLargestFileSize();
 
         obj.major();
+
+    }
+
+    private void major() throws IOException {
+
+        //  Custom SimpleFileVisitor
+        MaxFileSizeFinder maxFileSizeFinder = new MaxFileSizeFinder();
+
+//        Path dir = Paths.get("F:\\UNSORTED");
+//        Path dir = Paths.get("F:\\HEADQUARTERS..!!\\CodeBase");
+        Path dir = Paths.get(".");
+
+        Files.walkFileTree(dir, maxFileSizeFinder);
+
+        System.out.println("Dir. Count : " + dirCount);
+        System.out.println("Files Count : " + fileCount);
+        if (fileCount > 0)
+            System.out.println("Largest File : " + maxSizedFile.toAbsolutePath());
+        findSizeUnit();
+        System.out.println("Max Size : " + maxSize + " " + sizeUnit);
+
     }
 
     private static void findSizeUnit() {
@@ -45,36 +65,18 @@ public class WalkFileTree {
         }
     }
 
-    private void major() throws IOException {
-        MyFileVisitor myFileVisitor = new MyFileVisitor();
-
-//        Path dir = Paths.get("F:\\UNSORTED");
-        Path dir = Paths.get("F:\\HEADQUARTERS..!!\\CodeBase");
-
-        Files.walkFileTree(dir, myFileVisitor);
-
-        System.out.println("Dir. Count : " + dirCount);
-        System.out.println("Files Count : " + fileCount);
-        System.out.println("Largest File : " + maxSizedFile.toAbsolutePath());
-        findSizeUnit();
-        System.out.println("Max Size : " + maxSize + " " + sizeUnit);
-
-    }
-
-    public static class MyFileVisitor extends SimpleFileVisitor<Path> {
+    public static class MaxFileSizeFinder extends SimpleFileVisitor<Path> {
 
         @Override
-        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-//            System.out.println("About to visit Dir. : " + dir.toAbsolutePath());
+        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
             return FileVisitResult.CONTINUE;
         }
 
         @Override
-        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-//            System.out.println("Visiting File : " + file.toAbsolutePath());
-
+        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
             fileCount++;
-            long a = file.toFile().length();
+//            double a = file.toFile().length();
+            double a = attrs.size();
             if (maxSize < a) {
                 maxSize = a;
                 maxSizedFile = file;
@@ -83,24 +85,15 @@ public class WalkFileTree {
         }
 
         @Override
-        public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+        public FileVisitResult visitFileFailed(Path file, IOException exc) {
             System.out.println("\nFAILED to Visit File. : " + file.toAbsolutePath() + "\n");
+            System.out.println(exc.getMessage());
             return FileVisitResult.CONTINUE;
         }
 
         @Override
-        public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-
+        public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
             dirCount++;
-            /*
-                System.out.print(dirCount +" | ");
-
-                if(dirCount % 1000 == 0) {
-                    System.out.println();
-                    System.out.println("Just visited Dir. : " + dir.toAbsolutePath());
-                    System.out.println();
-                }
-            */
             return FileVisitResult.CONTINUE;
         }
     }
