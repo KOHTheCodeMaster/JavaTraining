@@ -1,5 +1,11 @@
 package dev.koh.practice.Cryptography.Hash;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.InvalidPathException;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
@@ -17,8 +23,8 @@ public class HashGenerator {
     public HashGenerator() {
 
         scanner = new Scanner(System.in);
-//        algorithm = "MD5";
-        algorithm = "SHA-512";
+        algorithm = "SHA-256";
+
         try {
             messageDigest = MessageDigest.getInstance(algorithm);
         } catch (NoSuchAlgorithmException e) {
@@ -35,11 +41,74 @@ public class HashGenerator {
     }
 
     private void major() {
+
         userInput();
-        byte[] bytes = extractByteArray();
-        hash = bytesToHexString2(bytes) + "";
+        long currentTime = System.currentTimeMillis();
+        byte[] bytes = extractHashByteArray();
+
+        hash = bytesToHexString(bytes) + "";
         System.out.println(hash);
         displayHash();
+
+        long endTime = System.currentTimeMillis();
+        System.out.println("Total Time Taken : " + (endTime - currentTime) + " ms");
+    }
+
+    private void userInput() {
+
+        System.out.println("Enter Source Path: ");
+        Path path = Paths.get(scanner.nextLine());
+
+        try {
+            path.toRealPath(LinkOption.NOFOLLOW_LINKS);
+            setSourcePath(path);
+        } catch (InvalidPathException | IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private byte[] extractHashByteArray() {
+
+        String rootPath = getSourcePath().toString();
+        byte[] dataBytes = extractByteData(rootPath);
+
+        return messageDigest.digest(dataBytes);
+
+    }
+
+    private byte[] extractByteData(String sourcePath) {
+
+        long currentTimeMillis = System.currentTimeMillis();
+        File file = new File(sourcePath);
+        byte[] bytes = new byte[(int) file.length()];
+
+        try (FileInputStream fileInputStream = new FileInputStream(file);
+             BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream)) {
+
+            int i = bufferedInputStream.read(bytes);
+            System.out.println("Bytes Read : " + i);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        long endTime = System.currentTimeMillis();
+        System.out.print("File Read in Time : ");
+        System.out.println(endTime - currentTimeMillis + " ms");
+
+        return bytes;
+    }
+
+    private StringBuilder bytesToHexString(byte[] bytes) {
+
+        StringBuilder result = new StringBuilder();
+        displayByteArray(bytes);
+
+        for (byte b : bytes)
+            result.append(String.format("%02x", b));
+
+        return result;
     }
 
     private void displayHash() {
@@ -50,24 +119,8 @@ public class HashGenerator {
                 + "\nHash : " + hash);
     }
 
-    private byte[] extractByteArray() {
-
-        String rootPath = getSourcePath().getFileName() + "";
-
-        return messageDigest.digest(rootPath.getBytes());
-
-    }
-
-    private void userInput() {
-
-        System.out.println("Enter Root Dir. Path: ");
-        setSourcePath(Paths.get(scanner.nextLine()));
-
-
-    }
-
-    private StringBuilder bytesToHexString(byte[] bytes) {
-
+    private StringBuilder bytesToHexString2(byte[] bytes) {
+        //  Slow...
         StringBuilder result = new StringBuilder();
 
         displayByteArray(bytes);
@@ -91,17 +144,6 @@ public class HashGenerator {
             System.out.print(b + " ");
 
         System.out.println();
-    }
-
-    private StringBuilder bytesToHexString2(byte[] bytes) {
-
-        StringBuilder result = new StringBuilder();
-        displayByteArray(bytes);
-
-        for (byte b : bytes)
-            result.append(String.format("%02x", b));
-
-        return result;
     }
 
     private Path getSourcePath() {
