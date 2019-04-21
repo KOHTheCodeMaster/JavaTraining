@@ -34,8 +34,9 @@ public class ReadBinaryFile {
 
     }
 
-    public byte[] extractByteData(String sourcePath) {
+    private byte[] extractByteData(String sourcePath) {
 
+        //  Reads only INTEGER.MAX_VALUE size of Bytes cuz Array size can't exceed that limit.
         File file = new File(sourcePath);
         byte[] bytes = new byte[(int) file.length()];
 

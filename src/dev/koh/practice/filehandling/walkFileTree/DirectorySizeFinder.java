@@ -1,19 +1,21 @@
 package dev.koh.practice.filehandling.walkFileTree;
 
+import dev.koh.libs.utils.KohFilesUtil;
+import dev.koh.libs.utils.MyTimer;
+
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 
 public class DirectorySizeFinder {
 
-    private static long dirCount = 0;
-    private static long fileCount = 0;
-    private static double maxSize;
-    private static double dirSize;
-    private static double tempDirSize;
-    private static double tempMaxSize;
-    private static String sizeUnit;
-    private static Path maxSizedFile = null;
+    private long dirCount;
+    private long fileCount;
+    private double maxSize;
+    private double dirSize;
+    private Path maxSizedFile;
+    private MyTimer myTimer;
+    private KohFilesUtil kohFilesUtil;
 
     public static void main(String[] args) {
 
@@ -22,39 +24,24 @@ public class DirectorySizeFinder {
 
     }
 
-    private static void displayStatus() {
+    private void displayStatus() {
 
         System.out.println("Dir. Count : " + dirCount);
         System.out.println("Files Count : " + fileCount);
 
         if (fileCount > 0) {
-            String largestFilePath = maxSizedFile.toAbsolutePath() + "";
-            System.out.println("Largest File : " + largestFilePath);
 
-            KohFilesUtil.findSizeUnit(maxSize, 1);
-            System.out.println("Max Size : " + tempMaxSize + " " + sizeUnit);
+            System.out.println("Largest File : " + maxSizedFile.toAbsolutePath() + "");
+
+            kohFilesUtil.updateFileSizeAndUnit(maxSize);
+            double tempMaxSize = kohFilesUtil.updatedFileSize;
+            System.out.println("Max Size : " + tempMaxSize + " " + kohFilesUtil.fileSize.getUnit());
         }
-        KohFilesUtil.findSizeUnit(dirSize, 2);
-        System.out.println("Dir. Size : " + tempDirSize + " " + sizeUnit);
 
-    }
+        kohFilesUtil.updateFileSizeAndUnit(dirSize);
+        double tempDirSize = kohFilesUtil.updatedFileSize;
+        System.out.println("Dir. Size : " + tempDirSize + " " + kohFilesUtil.fileSize.getUnit());
 
-    static String getSizeUnit() {
-        return sizeUnit;
-    }
-
-    static void setSizeUnit(String sizeUnit) {
-        DirectorySizeFinder.sizeUnit = sizeUnit;
-    }
-
-    static void setTempMaxSize(double tempMaxSize) {
-        DirectorySizeFinder.tempMaxSize = tempMaxSize;
-    }
-
-    //  ========================== Getters & Setters =================================
-
-    public static void setTempDirSize(double tempDirSize) {
-        DirectorySizeFinder.tempDirSize = tempDirSize;
     }
 
     private void major() {
@@ -65,7 +52,9 @@ public class DirectorySizeFinder {
         System.out.println("Enter Root Dir. Path: ");
         String rootDir = new java.util.Scanner(System.in).nextLine();
 
-        MyTimer.startTimer();
+        kohFilesUtil = new KohFilesUtil();
+        myTimer = new MyTimer();
+        myTimer.startTimer();
 
         try {
 
@@ -81,49 +70,9 @@ public class DirectorySizeFinder {
             e.printStackTrace();
         }
 
-        MyTimer.endTimer();
-        MyTimer.findTimeUnit();
+        myTimer.stopTimer();
 
-        System.out.println("Time Taken: " + MyTimer.totalTimeTaken + " " + MyTimer.timeUnit);
-
-    }
-
-    public static class MyTimer {
-        static double currentTime;
-        static double endTime;
-        static double totalTimeTaken;
-        static String timeUnit;
-
-        static void startTimer() {
-            currentTime = System.currentTimeMillis();
-        }
-
-        static void endTimer() {
-            endTime = System.currentTimeMillis();
-            totalTimeTaken = endTime - currentTime;
-        }
-
-        static void findTimeUnit() {
-
-            final int THOUSAND_MILLI_SECONDS = 1000;
-
-            if (totalTimeTaken < THOUSAND_MILLI_SECONDS) {
-                timeUnit = "ms";
-            } else if (totalTimeTaken < 60 * THOUSAND_MILLI_SECONDS) {
-                timeUnit = "s";
-                totalTimeTaken /= THOUSAND_MILLI_SECONDS;
-            } else if (totalTimeTaken < 60 * 60 * THOUSAND_MILLI_SECONDS) {
-                timeUnit = "minutes";
-                totalTimeTaken /= 60 * THOUSAND_MILLI_SECONDS;
-            }/* else if (totalTimeTaken < TERA) {
-                timeUnit = "GB";
-                totalTimeTaken /= GIGA;
-            } else if (totalTimeTaken < PETA) {
-                timeUnit = "TB";
-                totalTimeTaken /= TERA;
-            }*/
-
-        }
+        System.out.println("Time Taken: " + myTimer.getTotalTimeTaken() + " " + myTimer.getTimeUnit());
 
     }
 
