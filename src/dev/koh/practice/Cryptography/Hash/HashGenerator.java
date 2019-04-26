@@ -19,9 +19,9 @@ public class HashGenerator {
     private byte[] bytes;
 //    private Scanner scanner;
 
-    private HashGenerator() {
+    public HashGenerator(String algorithm) {
 
-        algorithm = "SHA-256";
+        this.algorithm = algorithm;
 //        scanner = new Scanner(System.in);
 //        currentFilePath = Paths.get(".");
 
@@ -35,7 +35,7 @@ public class HashGenerator {
 
     public static void main(String[] args) {
 
-        HashGenerator hashGenerator = new HashGenerator();
+        HashGenerator hashGenerator = new HashGenerator("SHA-256");
         hashGenerator.major();
 
     }
@@ -64,6 +64,11 @@ public class HashGenerator {
         System.out.println("Total Time Taken : " + myTimer.getTotalTimeTaken() + " " + myTimer.getTimeUnit());
     }
 
+    public static void setCurrentFilePath(Path currentFilePath) {
+        HashGenerator.currentFilePath = currentFilePath;
+    }
+
+
     private void userInput() {
 
         System.out.println("Enter Source Path: ");
@@ -79,9 +84,27 @@ public class HashGenerator {
 
     }
 
+    public String generateStringHash(String str) {
+
+        this.bytes = messageDigest.digest(str.getBytes());
+        StringBuilder hashString = bytesToHexString(this.bytes);
+        this.hash = hashString + "";
+        return this.hash;
+    }
+
+    private StringBuilder bytesToHexString(byte[] bytes) {
+
+        StringBuilder result = new StringBuilder();
+
+        for (byte b : bytes)
+            result.append(String.format("%02x", b));
+
+        return result;
+    }
+
     private byte[] extractHashByteArray(Path sourceFilePath) {
 
-        long currentTimeMillis = System.currentTimeMillis();
+//        long currentTimeMillis = System.currentTimeMillis();
         File file = sourceFilePath.toFile();
 
         //  Check Valid sourceFilePath
@@ -107,41 +130,11 @@ public class HashGenerator {
 
         bytes = messageDigest.digest();
 
-        long endTime = System.currentTimeMillis();
-        System.out.print("File Processed in Time : ");
-        System.out.println(endTime - currentTimeMillis + " ms");
+//        long endTime = System.currentTimeMillis();
+//        System.out.print("File Processed in Time : ");
+//        System.out.println(endTime - currentTimeMillis + " ms");
 
         return bytes;
-    }
-
-    private StringBuilder bytesToHexString(byte[] bytes) {
-
-        StringBuilder result = new StringBuilder();
-
-        for (byte b : bytes)
-            result.append(String.format("%02x", b));
-
-        return result;
-    }
-
-    private void displayHash() {
-        KohFilesUtil kohFilesUtil = new KohFilesUtil();
-        long fileLength = getCurrentFilePath().toFile().length();
-
-        kohFilesUtil.updateFileSizeAndUnit(fileLength);
-        String currentFile = "null";
-        try {
-            currentFile = getCurrentFilePath().toRealPath().toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        displayByteArray(this.bytes);
-        System.out.println("Input File : " + currentFile
-                + "\nInput File Length : " + kohFilesUtil.updatedFileSize + " " + kohFilesUtil.fileSize.getUnit()
-                + "\nHash Length : " + hash.length()
-                + " | Algorithm : " + algorithm
-                + "\nHash : " + hash);
     }
 
     private StringBuilder bytesToHexString2(byte[] bytes) {
@@ -181,8 +174,25 @@ public class HashGenerator {
         return currentFilePath;
     }
 
-    private static void setCurrentFilePath(Path currentFilePath) {
-        HashGenerator.currentFilePath = currentFilePath;
+    private void displayHash() {
+        KohFilesUtil kohFilesUtil = new KohFilesUtil();
+        long fileLength = getCurrentFilePath().toFile().length();
+
+        kohFilesUtil.updateFileSizeAndUnit(fileLength);
+        String currentFile = "null";
+        try {
+            currentFile = getCurrentFilePath().toRealPath().toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        displayByteArray(this.bytes);
+        System.out.println("Input File : " + currentFile
+                + "\nInput File Length : " + kohFilesUtil.getUpdatedFileSize()
+                + " " + kohFilesUtil.getFileSize().getUnit()
+                + "\nHash Length : " + hash.length()
+                + " | Algorithm : " + algorithm
+                + "\nHash : " + hash);
     }
 
     class HashFileVisitor extends SimpleFileVisitor<Path> {
@@ -215,7 +225,6 @@ public class HashGenerator {
         @Override
         public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
 
-//            dirCount++;
 //            trackDir(dir);
 
             return FileVisitResult.CONTINUE;

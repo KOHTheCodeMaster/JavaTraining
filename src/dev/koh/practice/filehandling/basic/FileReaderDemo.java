@@ -1,4 +1,4 @@
-package dev.koh.practice.filehandling;
+package dev.koh.practice.filehandling.basic;
 
 import java.io.File;
 import java.io.FileNotFoundException;

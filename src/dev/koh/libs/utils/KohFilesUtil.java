@@ -1,9 +1,15 @@
 package dev.koh.libs.utils;
 
+import java.io.IOException;
+import java.nio.file.InvalidPathException;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class KohFilesUtil {
 
-    public FileSize fileSize;
-    public double updatedFileSize;
+    private FileSize fileSize;
+    private double updatedFileSize;
 
     public void updateFileSizeAndUnit(double fileSize) {
 
@@ -22,4 +28,29 @@ public class KohFilesUtil {
 
     }
 
+    public static Path userInputSourceDirPath() {
+
+        System.out.println("Enter Source Dir. Path: ");
+        Path path = null;
+        while (path == null) {
+            try {
+                path = Paths.get(new java.util.Scanner(System.in).nextLine());
+                path.toRealPath(LinkOption.NOFOLLOW_LINKS);
+            } catch (InvalidPathException | IOException | NullPointerException e) {
+                e.getMessage();
+                System.out.println("Please Enter a Valid Path!");
+                path = null;
+            }
+        }
+        return (path);
+
+    }
+
+    public FileSize getFileSize() {
+        return fileSize;
+    }
+
+    public double getUpdatedFileSize() {
+        return updatedFileSize;
+    }
 }

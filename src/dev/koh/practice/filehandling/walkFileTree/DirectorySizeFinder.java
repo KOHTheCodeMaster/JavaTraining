@@ -14,7 +14,6 @@ public class DirectorySizeFinder {
     private double maxSize;
     private double dirSize;
     private Path maxSizedFile;
-    private MyTimer myTimer;
     private KohFilesUtil kohFilesUtil;
 
     public static void main(String[] args) {
@@ -34,13 +33,13 @@ public class DirectorySizeFinder {
             System.out.println("Largest File : " + maxSizedFile.toAbsolutePath() + "");
 
             kohFilesUtil.updateFileSizeAndUnit(maxSize);
-            double tempMaxSize = kohFilesUtil.updatedFileSize;
-            System.out.println("Max Size : " + tempMaxSize + " " + kohFilesUtil.fileSize.getUnit());
+            double tempMaxSize = kohFilesUtil.getUpdatedFileSize();
+            System.out.println("Max Size : " + tempMaxSize + " " + kohFilesUtil.getFileSize().getUnit());
         }
 
         kohFilesUtil.updateFileSizeAndUnit(dirSize);
-        double tempDirSize = kohFilesUtil.updatedFileSize;
-        System.out.println("Dir. Size : " + tempDirSize + " " + kohFilesUtil.fileSize.getUnit());
+        double tempDirSize = kohFilesUtil.getUpdatedFileSize();
+        System.out.println("Dir. Size : " + tempDirSize + " " + kohFilesUtil.getFileSize().getUnit());
 
     }
 
@@ -53,7 +52,7 @@ public class DirectorySizeFinder {
         String rootDir = new java.util.Scanner(System.in).nextLine();
 
         kohFilesUtil = new KohFilesUtil();
-        myTimer = new MyTimer();
+        MyTimer myTimer = new MyTimer();
         myTimer.startTimer();
 
         try {

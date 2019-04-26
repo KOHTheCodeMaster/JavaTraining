@@ -2,8 +2,10 @@ package dev.koh.libs.utils;
 
 enum TimeUnit {
 
-    MILLI_SECOND("ms", 1),
-    SECOND("s", 1000),
+    NANO_SECOND("ns", 1),
+    MICRO_SECOND("us", NANO_SECOND.getTimeInMilliSeconds() * 1000),
+    MILLI_SECOND("ms", MICRO_SECOND.getTimeInMilliSeconds() * 1000),
+    SECOND("s", MILLI_SECOND.getTimeInMilliSeconds() * 1000),
     MINUTE("min", 60 * SECOND.timeInMilliSeconds),
     HOUR("hr", 60 * MINUTE.timeInMilliSeconds),
     DAY("day", 24 * HOUR.timeInMilliSeconds),
@@ -13,9 +15,9 @@ enum TimeUnit {
     DECADE("decade", 10 * YEAR.timeInMilliSeconds);
 
     private final String unit;
-    private final long timeInMilliSeconds;
+    private final double timeInMilliSeconds;
 
-    TimeUnit(String unit, long timeInMilliSeconds) {
+    TimeUnit(String unit, double timeInMilliSeconds) {
         this.unit = unit;
         this.timeInMilliSeconds = timeInMilliSeconds;
     }
@@ -24,7 +26,7 @@ enum TimeUnit {
         return unit;
     }
 
-    public long getTimeInMilliSeconds() {
+    public double getTimeInMilliSeconds() {
         return timeInMilliSeconds;
     }
 
@@ -40,15 +42,30 @@ public class MyTimer {
     private TimeUnit timeUnit;
 
     public void startTimer() {
-        currentTime = System.currentTimeMillis();
+        currentTime = System.nanoTime();
     }
 
     public void stopTimer() {
 
-        double endTime = System.currentTimeMillis();
+        double endTime = System.nanoTime();
         totalTimeTaken = endTime - currentTime;
         findTimeUnit();
 
+    }
+
+    public void stopTimer(boolean shouldDisplayTimeTaken) {
+
+        double endTime = System.nanoTime();
+        totalTimeTaken = endTime - currentTime;
+        findTimeUnit();
+
+        if (shouldDisplayTimeTaken)
+            displayTimeTaken();
+
+    }
+
+    private void displayTimeTaken() {
+        System.out.println("Time Taken: " + this.getTotalTimeTaken() + " " + this.getTimeUnit());
     }
 
     private void findTimeUnit() {
@@ -64,7 +81,11 @@ public class MyTimer {
         final long DECADE = 10 * YEAR;
     */
 
-        if (totalTimeTaken < TimeUnit.SECOND.getTimeInMilliSeconds())
+        if (totalTimeTaken < TimeUnit.MICRO_SECOND.getTimeInMilliSeconds())
+            timeUnit = TimeUnit.NANO_SECOND;
+        else if (totalTimeTaken < TimeUnit.MILLI_SECOND.getTimeInMilliSeconds())
+            timeUnit = TimeUnit.MICRO_SECOND;
+        else if (totalTimeTaken < TimeUnit.SECOND.getTimeInMilliSeconds())
             timeUnit = TimeUnit.MILLI_SECOND;
         else if (totalTimeTaken < TimeUnit.MINUTE.getTimeInMilliSeconds())
             timeUnit = TimeUnit.SECOND;
