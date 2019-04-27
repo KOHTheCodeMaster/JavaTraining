@@ -1,8 +1,9 @@
 package dev.koh.practice.filehandling.search.hashsearch;
 
 import java.io.File;
+import java.io.Serializable;
 
-public class MyFile {
+public class MyFile implements Serializable {
 
     private File file;
     private String fileName;
@@ -33,7 +34,7 @@ public class MyFile {
         stringBuilder.append("Absolute Path : ").append(absolutePath).append("\n");
         stringBuilder.append("Canonical Path: ").append(canonicalPath).append("\n");
         stringBuilder.append("File Size: ").append(fileSize).append("\n");
-        stringBuilder.append("File Size Unit: ").append(fileSizeUnit).append("\n").append("\n");
+        stringBuilder.append("File Size Unit: ").append(fileSizeUnit).append("\n");
 
         return stringBuilder.toString();
     }

@@ -5,18 +5,26 @@ import dev.koh.practice.Cryptography.Hash.HashGenerator;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
+import java.io.Serializable;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-public class FileIndexer {
+public class FileIndexer implements Serializable {
 
     private Map<String, LinkedList<MyFile>> memoryMap;
     private LinkedList<MyFile> linkedList;
-    private Path sourceDirPath;
-//    Double aDouble;
+
+    private transient Path sourceDirPath;
+
+    private double filesCount = 0;
+    private double dirsCount = 0;
+    private double failedToIndexFilesCount;
 
     FileIndexer() {
 
@@ -37,47 +45,31 @@ public class FileIndexer {
             System.out.println("\nFiles Count : " + indexFileVisitor.getFilesCount());
             System.out.println("Dirs. Count : " + indexFileVisitor.getDirsCount());
 
-//            f1();
-//            searchForFile();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
-    private void f1() {
-        double d = 0;
-        System.out.println("Double Max: + " + Double.MAX_VALUE);
-        System.out.println("Long Max: + " + Long.MAX_VALUE);
-
-        for (d = 0; d < Double.MAX_VALUE; d++) {
-            memoryMap.put(String.valueOf(d), null);
-
-            if (d % 1E5 == 0) {
-                System.out.print(" d : " + d + " | ");
-//                System.out.println(memoryMap.get(String.valueOf(d)));
-            }
-
-        }
-        System.out.println("..!!");
-
-    }
-
     void searchForFile() {
 
-        Path filePath = Paths.get(new java.util.Scanner(System.in).nextLine());
-        String currentFileNameHash = generateFileNameHash(filePath.getFileName().toString());
+        System.out.println("Enter File Name to Search For: ");
 
+        InstantFileSearch.myTimer.pauseTimer();
+        String fileNameToSearch = new java.util.Scanner(System.in).nextLine();
+        InstantFileSearch.myTimer.continueTimer();
+
+        String currentFileNameHash = generateFileNameHash(fileNameToSearch);
         linkedList = memoryMap.get(currentFileNameHash);
+
         if (linkedList == null)
             System.out.println("File Not Found!");
         else {
-            System.out.println("\n----------------\n" +
-                    "File Found..!!" +
-                    "\n----------------\n");
             int i = 0;
             while (i < linkedList.size()) {
+                System.out.println("----------------\n" +
+                        "File Found..!!\n" +
+                        "----------------");
                 System.out.println(linkedList.get(i));
                 i++;
             }
@@ -102,11 +94,15 @@ public class FileIndexer {
         this.sourceDirPath = sourceDirPath;
     }
 
+    public double getFilesCount() {
+        return filesCount;
+    }
+
+    public double getDirsCount() {
+        return dirsCount;
+    }
+
     private class IndexFileVisitor extends SimpleFileVisitor<Path> {
-
-        private double filesCount = 0;
-        private double dirsCount = 0;
-
 
         @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
@@ -120,6 +116,15 @@ public class FileIndexer {
                 return FileVisitResult.CONTINUE;
             }
 
+//            System.out.println("FN: " + myFile.getFileName());
+            indexCurrentFile(myFile);
+
+            return FileVisitResult.CONTINUE;
+
+        }
+
+        private void indexCurrentFile(MyFile myFile) {
+
             String fileNameHash = generateFileNameHash(myFile);
 
             LinkedList<MyFile> tempLinkedList = new LinkedList<>();
@@ -128,9 +133,9 @@ public class FileIndexer {
             if (memoryMap.get(fileNameHash) == null)
                 memoryMap.put(fileNameHash, tempLinkedList);
             else {
-//                linkedList = memoryMap.get(fileNameHash);
+                linkedList = memoryMap.get(fileNameHash);
+                linkedList.addLast(myFile);
             }
-            return FileVisitResult.CONTINUE;
 
         }
 
@@ -161,6 +166,7 @@ public class FileIndexer {
             String canonicalPath;
             double fileSize;
             String fileSizeUnit;
+
             try {
 
                 file = path.toFile().getCanonicalFile();
@@ -174,7 +180,6 @@ public class FileIndexer {
                 fileSize = kohFilesUtil.getUpdatedFileSize();
                 fileSizeUnit = kohFilesUtil.getFileSize().getUnit();
 
-                //                System.out.println(myFile);
                 return new MyFile(file, fileName, absolutePath, canonicalPath, fileSize, fileSizeUnit);
 
             } catch (IOException e) {
@@ -187,9 +192,12 @@ public class FileIndexer {
 
         @Override
         public FileVisitResult visitFileFailed(Path file, IOException exc) {
+
+            failedToIndexFilesCount++;
             System.out.println("\nFAILED to Visit File. : " + file.toAbsolutePath() + "\n");
             System.out.println(exc.getMessage());
             return FileVisitResult.CONTINUE;
+
         }
 
         @Override

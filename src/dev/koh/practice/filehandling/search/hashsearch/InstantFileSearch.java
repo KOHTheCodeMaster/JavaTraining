@@ -2,7 +2,10 @@ package dev.koh.practice.filehandling.search.hashsearch;
 
 import dev.koh.libs.utils.KohFilesUtil;
 import dev.koh.libs.utils.MyTimer;
+import dev.koh.libs.utils.Serializer;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 
@@ -10,8 +13,15 @@ public class InstantFileSearch {
 
     private FileIndexer fileIndexer;
     private Path sourcePath;
-    private MyTimer myTimer;
+    static MyTimer myTimer;
+    private static Serializer serializer;
+    private static String serializationFileRelativeLocation;
 
+    static {
+        serializationFileRelativeLocation = "res/serialization/index/fileIndexer.ser";
+    }
+
+    private File serializationFile;
 
     public static void main(String[] args) {
 
@@ -21,6 +31,9 @@ public class InstantFileSearch {
     }
 
     private void start() {
+
+        InstantFileSearch.myTimer = new MyTimer();
+        InstantFileSearch.myTimer.startTimer();
 
         System.out.println("Begin.");
 
@@ -33,25 +46,81 @@ public class InstantFileSearch {
 
     private void major() {
 
+        InstantFileSearch.myTimer.pauseTimer();
         setSourcePath(KohFilesUtil.userInputSourceDirPath());
-
-        myTimer = new MyTimer();
-        myTimer.startTimer();
+        InstantFileSearch.myTimer.continueTimer();
 
         try {
 
             Path sourceDirPath = getSourcePath();
+            serializationFile = new File(serializationFileRelativeLocation);
 
-            fileIndexer = new FileIndexer();
-            fileIndexer.scanSourcePath(sourceDirPath);
+            InstantFileSearch.serializer = new Serializer(fileIndexer, serializationFile);
+
+            boolean isFileIndexerDeserialized = deserialization();
+            if (!isFileIndexerDeserialized) {
+                System.out.println("Initializing Indexer...");
+                fileIndexer = new FileIndexer();
+
+                System.out.println("Scanning Source Dir.");
+                fileIndexer.scanSourcePath(sourceDirPath);
+
+                //  Save the current State of the fileIndexer
+                initializeSerializationFile();
+                serialization();
+
+            } else {
+                System.out.println("Indexer Loaded!");
+//                System.out.println(fileIndexer);
+            }
+
             fileIndexer.searchForFile();
+
 
         } catch (InvalidPathException e) {
             System.out.println(e.getMessage());
         }
 
-        myTimer.stopTimer(true);
+        InstantFileSearch.myTimer.stopTimer(true);
 
+    }
+
+    private void initializeSerializationFile() {
+        if (!serializationFile.exists()) {
+            try {
+                serializationFile.createNewFile();
+            } catch (IOException e) {
+                e.getMessage();
+                System.out.println("Could not ");
+            }
+        }
+    }
+
+    private void serialization() {
+
+        //  Update the serializer with the fileIndexer object state to be stored & serialized
+        InstantFileSearch.serializer.setObject(fileIndexer);
+        InstantFileSearch.serializer.setSerializeFile(serializationFile);
+
+        //  Serialize the fileIndexer object
+        boolean serializeSuccessful = InstantFileSearch.serializer.serializeObject();
+
+        if (!serializeSuccessful)
+            System.out.println("Failed to Serialize fileIndexer!");
+/*
+        else
+            System.out.println("fileIndexer Serialized successfully @: "
+                    + serializer.getSerializeFile().getAbsolutePath());
+*/
+    }
+
+    private boolean deserialization() {
+
+        boolean indexerExists = InstantFileSearch.serializer.checkForExistingSerialization();
+        if (indexerExists)
+            fileIndexer = (FileIndexer) serializer.deserializeObject();
+
+        return indexerExists;
     }
 
     private Path getSourcePath() {

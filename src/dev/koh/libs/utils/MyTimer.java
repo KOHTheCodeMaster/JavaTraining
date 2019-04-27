@@ -39,6 +39,8 @@ enum TimeUnit {
 public class MyTimer {
     private double currentTime;
     private double totalTimeTaken;
+    private double pauseTime;
+    private double totalPauseTime;
     private TimeUnit timeUnit;
 
     public void startTimer() {
@@ -51,6 +53,16 @@ public class MyTimer {
         totalTimeTaken = endTime - currentTime;
         findTimeUnit();
 
+    }
+
+    public void pauseTimer() {
+        pauseTime = System.nanoTime();
+    }
+
+    public void continueTimer() {
+        double endTime = System.nanoTime();
+        totalPauseTime = endTime - pauseTime;
+        currentTime += totalPauseTime;
     }
 
     public void stopTimer(boolean shouldDisplayTimeTaken) {
