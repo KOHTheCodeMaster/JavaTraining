@@ -15,13 +15,13 @@ public class InstantFileSearch {
     private Path sourcePath;
     static MyTimer myTimer;
     private static Serializer serializer;
+    private File serializationFile;
     private static String serializationFileRelativeLocation;
 
     static {
         serializationFileRelativeLocation = "res/serialization/index/fileIndexer.ser";
     }
 
-    private File serializationFile;
 
     public static void main(String[] args) {
 
@@ -57,8 +57,12 @@ public class InstantFileSearch {
 
             InstantFileSearch.serializer = new Serializer(fileIndexer, serializationFile);
 
-            boolean isFileIndexerDeserialized = deserialization();
-            if (!isFileIndexerDeserialized) {
+            //  Check for existence of serializationFile
+            boolean isSerializationFileExists = serializationFile.exists();
+            if (!isSerializationFileExists) {
+
+                initializeSerializationFile();
+
                 System.out.println("Initializing Indexer...");
                 fileIndexer = new FileIndexer();
 
@@ -66,15 +70,16 @@ public class InstantFileSearch {
                 fileIndexer.scanSourcePath(sourceDirPath);
 
                 //  Save the current State of the fileIndexer
-                initializeSerializationFile();
                 serialization();
 
             } else {
                 System.out.println("Indexer Loaded!");
+                deserialization();
 //                System.out.println(fileIndexer);
             }
 
             fileIndexer.searchForFile();
+
 
 
         } catch (InvalidPathException e) {
@@ -96,6 +101,24 @@ public class InstantFileSearch {
         }
     }
 
+    private void deserialization() {
+
+        //  Update the serializer with the fileIndexer object state to be stored & serialized
+        InstantFileSearch.serializer.setObject(fileIndexer);
+        InstantFileSearch.serializer.setSerializeFile(serializationFile);
+
+        //  Serialize the fileIndexer object
+        fileIndexer = (FileIndexer) InstantFileSearch.serializer.deserializeObject();
+
+//        if (!serializeSuccessful)
+//            System.out.println("Failed to Serialize fileIndexer!");
+/*
+        else
+            System.out.println("fileIndexer Serialized successfully @: "
+                    + serializer.getSerializeFile().getAbsolutePath());
+*/
+    }
+
     private void serialization() {
 
         //  Update the serializer with the fileIndexer object state to be stored & serialized
@@ -114,11 +137,11 @@ public class InstantFileSearch {
 */
     }
 
-    private boolean deserialization() {
+    private boolean checkSerializationFileExistence() {
 
         boolean indexerExists = InstantFileSearch.serializer.checkForExistingSerialization();
-        if (indexerExists)
-            fileIndexer = (FileIndexer) serializer.deserializeObject();
+//        if (indexerExists)
+//            fileIndexer = (FileIndexer) serializer.deserializeObject();
 
         return indexerExists;
     }

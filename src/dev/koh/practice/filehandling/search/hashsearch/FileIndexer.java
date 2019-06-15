@@ -65,25 +65,20 @@ public class FileIndexer implements Serializable {
         if (linkedList == null)
             System.out.println("File Not Found!");
         else {
-            int i = 0;
-            while (i < linkedList.size()) {
+            for (MyFile file : linkedList) {
                 System.out.println("----------------\n" +
                         "File Found..!!\n" +
                         "----------------");
-                System.out.println(linkedList.get(i));
-                i++;
+                System.out.println(file);
             }
         }
+
+        System.out.println("size : " + memoryMap.size());
     }
 
     private String generateFileNameHash(String fileName) {
         HashGenerator hashGenerator = new HashGenerator("SHA-256");
         return hashGenerator.generateStringHash(fileName);
-    }
-
-    private String generateFileNameHash(MyFile myFile) {
-        HashGenerator hashGenerator = new HashGenerator("SHA-256");
-        return hashGenerator.generateStringHash(myFile.getFileName());
     }
 
     private Path getSourceDirPath() {
@@ -105,7 +100,63 @@ public class FileIndexer implements Serializable {
     private class IndexFileVisitor extends SimpleFileVisitor<Path> {
 
         @Override
+        public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+
+            /*
+
+            Path currentDir = dir;
+            LinkedList oldLinklist = folderMap.get(generateFileNameHash(currentDir.getFileName().toString()));
+                Iterate oldLinkList
+                    if(abs path of cf2 == abs path of i)
+                        oldDir = i;
+
+            if(oldDIr.getModTime == currentDir.getModTime)
+            FileVisitResult.SKIP_SUBTREE
+            else{
+                go to sibling dir.
+                FileVisitResult.CONTINUE ...
+
+
+            }
+
+
+             */
+
+            return FileVisitResult.CONTINUE;
+        }
+
+        @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+
+            /*
+
+            Path currentF = file;
+            LinkedList oldLinklist = fileMap.get(generateFileNameHash(currentF.getFileName().toString()));
+            if(oldLinkList == null){
+                normal scan... following code...
+                CONTINUE;
+            }
+
+                Iterate oldLinkList
+        if(abs path of cf2 == abs path of i)
+            oldF = i;
+
+            if(oldF.getModTime == currentF.getModTime)
+                FileVisitResult.CONTINUE ...
+            else{
+
+                Iterate oldLinkList
+                    if(abs path of cf2 == abs path of i)
+                        remove i
+
+                normal scan... following code...
+                update oldF or i with newNode in linklist.
+
+                linkedList = memoryMap.get(fileNameHash);
+
+            }
+
+             */
 
             filesCount++;
 
@@ -125,7 +176,7 @@ public class FileIndexer implements Serializable {
 
         private void indexCurrentFile(MyFile myFile) {
 
-            String fileNameHash = generateFileNameHash(myFile);
+            String fileNameHash = generateFileNameHash(myFile.getFileName());
 
             LinkedList<MyFile> tempLinkedList = new LinkedList<>();
             tempLinkedList.add(myFile);
@@ -138,13 +189,6 @@ public class FileIndexer implements Serializable {
             }
 
         }
-
-/*
-        private String generateFileNameHash(MyFile myFile) {
-            HashGenerator hashGenerator = new HashGenerator("SHA-256");
-            return hashGenerator.generateStringHash(myFile.getFileName().toString());
-        }
-*/
 
         private double parseHexStringToDecimal(String hex) {
             String digits = "0123456789ABCDEF";
